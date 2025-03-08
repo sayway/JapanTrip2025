@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan 2025 Trip: Seiya and Kerenza</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/api/placeholder/800/200') center/cover;
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .controls {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .controls select, .controls button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .controls button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .controls button:hover {
+            background-color: #45a049;
+        }
+        
+        .map-container {
+            height: 500px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .attraction-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .attraction-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .attraction-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .attraction-image {
+            height: 160px;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+        
+        .attraction-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .duration-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .attraction-details {
+            padding: 15px;
+        }
+        
+        .attraction-details h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .attraction-location {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .attraction-description {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .view-on-map {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .view-on-map:hover {
+            background-color: #ff5252;
+        }
+        
+        @media (max-width: 768px) {
+            .attraction-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Japan 2025 Trip: Seiya and Kerenza</h1>
+    </header>
+    
+    <div class="container">
+        <div class="controls">
+            <select id="city-filter">
+                <option value="all">All Cities</option>
+                <option value="Yokohama">Yokohama</option>
+                <option value="Yokosuka">Yokosuka</option>
+                <option value="Hakone">Hakone</option>
+                <option value="Numazu">Numazu</option>
+                <option value="Shimoda">Shimoda</option>
+            </select>
+            
+            <select id="duration-filter">
+                <option value="all">All Durations</option>
+                <option value="1 day">1 day</option>
+                <option value="1-2 days">1-2 days</option>
+                <option value="1.5 days">1.5 days</option>
+                <option value="2 days">2 days</option>
+                <option value="3 days">3 days</option>
+            </select>
+            
+            <button id="reset-filters">Reset Filters</button>
+        </div>
+        
+        <div id="map" class="map-container"></div>
+        
+        <div class="attraction-list" id="attraction-list">
+            <!-- Cards will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Data from the provided dataset
+        const attractionsData = [
+            {
+                name: "Red Brick Warehouse",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Visit the small Japan Coast Guard museum featuring a North Korean spy ship recovered from the ocean floor after a running gun battle.",
+                latitude: 35.45,
+                longitude: 139.65
+            },
+            {
+                name: "Daibutsu Trail",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Moderately challenging trail, can be slippery. Best visited on a dry day. Take the train to Kita Kamakura.",
+                latitude: 35.3197,
+                longitude: 139.55
+            },
+            {
+                name: "Minato Mirai",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Shopping district with modern attractions.",
+                latitude: 35.4545,
+                longitude: 139.6317
+            },
+            {
+                name: "Sankeien Garden",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Beautiful traditional Japanese garden.",
+                latitude: 35.4333,
+                longitude: 139.65
+            },
+            {
+                name: "Chinatown",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Explore the vibrant Chinatown area.",
+                latitude: 35.4427,
+                longitude: 139.65
+            },
+            {
+                name: "Yamate",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Historic area with Western-style houses.",
+                latitude: 35.4333,
+                longitude: 139.65
+            },
+            {
+                name: "New Grand Hotel",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Enjoy a meal or coffee at this historic hotel.",
+                latitude: 35.4439,
+                longitude: 139.64
+            },
+            {
+                name: "Shin-Yokohama Ramen Street",
+                city: "Yokohama",
+                duration: "3 days",
+                description: "Famous ramen street located at the station.",
+                latitude: 35.51,
+                longitude: 139.617
+            },
+            {
+                name: "Mikasa Park & Battleship Mikasa",
+                city: "Yokosuka",
+                duration: "1 day",
+                description: "Preserved Japanese battleship that played a major role in the Russo-Japanese War.",
+                latitude: 35.2833,
+                longitude: 139.6667
+            },
+            {
+                name: "Dobuita Street",
+                city: "Yokosuka",
+                duration: "1 day",
+                description: "Try the Yokosuka Navy Burger or Kaigun (Navy) Curry, inspired by U.S. and Japanese naval meals.",
+                latitude: 35.2833,
+                longitude: 139.6667
+            },
+            {
+                name: "Kannonzaki Park & Lighthouse",
+                city: "Yokosuka",
+                duration: "1 day",
+                description: "Scenic coastal walk with a lighthouse.",
+                latitude: 35.2833,
+                longitude: 139.6667
+            },
+            {
+                name: "Verny Park",
+                city: "Yokosuka",
+                duration: "1 day",
+                description: "French-style park with beautiful views.",
+                latitude: 35.2833,
+                longitude: 139.6667
+            },
+            {
+                name: "Open Air Museum",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Outdoor museum with sculptures and art installations.",
+                latitude: 35.25,
+                longitude: 139.1
+            },
+            {
+                name: "Hakone Shrine",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Famous shrine located by Lake Ashi.",
+                latitude: 35.2,
+                longitude: 139.0333
+            },
+            {
+                name: "Hakone Ropeway",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Scenic ropeway offering views of the surrounding area.",
+                latitude: 35.2333,
+                longitude: 139.1
+            },
+            {
+                name: "Volcanic Eggs",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Tour to see volcanic eggs (Japanese only, booking required).",
+                latitude: 35.2333,
+                longitude: 139.1
+            },
+            {
+                name: "Lake Ashi",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Beautiful lake with views of Mount Fuji on clear days.",
+                latitude: 35.2,
+                longitude: 139.0333
+            },
+            {
+                name: "Gyoza Centre",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Restaurant known for its gyoza (dumplings).",
+                latitude: 35.2333,
+                longitude: 139.1
+            },
+            {
+                name: "Owakudani Valley",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Volcanic valley with hot springs and sulfur vents.",
+                latitude: 35.2333,
+                longitude: 139.1
+            },
+            {
+                name: "Amazake Chaya",
+                city: "Hakone",
+                duration: "2 days",
+                description: "Traditional tea house offering amazake (sweet sake).",
+                latitude: 35.2333,
+                longitude: 139.1
+            },
+            {
+                name: "Deep Sea Aquarium",
+                city: "Numazu",
+                duration: "1-2 days",
+                description: "Aquarium featuring deep-sea creatures.",
+                latitude: 35.1,
+                longitude: 138.8667
+            },
+            {
+                name: "Mishima Skywalk",
+                city: "Numazu",
+                duration: "1-2 days",
+                description: "Suspension bridge offering panoramic views.",
+                latitude: 35.1167,
+                longitude: 138.9167
+            },
+            {
+                name: "Senbonhama Beach",
+                city: "Numazu",
+                duration: "1-2 days",
+                description: "Scenic beach area.",
+                latitude: 35.1,
+                longitude: 138.8667
+            },
+            {
+                name: "Numazu Fish Market",
+                city: "Numazu",
+                duration: "1-2 days",
+                description: "Fish market offering fresh seafood (closed on Saturdays).",
+                latitude: 35.1,
+                longitude: 138.8667
+            },
+            {
+                name: "Mt Kanuki",
+                city: "Numazu",
+                duration: "1-2 days",
+                description: "Mountain with hiking trails.",
+                latitude: 35.1,
+                longitude: 138.8667
+            },
+            {
+                name: "Kakitagawa Springs",
+                city: "Numazu",
+                duration: "1-2 days",
+                description: "Natural springs with clear water.",
+                latitude: 35.1,
+                longitude: 138.8667
+            },
+            {
+                name: "Shirahama Beach",
+                city: "Shimoda",
+                duration: "1.5 days",
+                description: "Beautiful beach area.",
+                latitude: 34.6833,
+                longitude: 138.9333
+            },
+            {
+                name: "Perry Road",
+                city: "Shimoda",
+                duration: "1.5 days",
+                description: "Historic road with shops and restaurants.",
+                latitude: 34.6833,
+                longitude: 138.9333
+            },
+            {
+                name: "Cape Irozaki",
+                city: "Shimoda",
+                duration: "1.5 days",
+                description: "Scenic cape with a beach.",
+                latitude: 34.6833,
+                longitude: 138.9333
+            }
+        ];
+
+        // Initialize the map
+        let map;
+        let markers = [];
+
+        function initMap() {
+            // Create a map centered on Japan
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 35.2, longitude: 139.1 },
+                zoom: 9
+            });
+            
+            // Add markers for each attraction
+            attractionsData.forEach((attraction, index) => {
+                const marker = new google.maps.Marker({
+                    position: { lat: attraction.latitude, lng: attraction.longitude },
+                    map: map,
+                    title: attraction.name,
+                    animation: google.maps.Animation.DROP,
+                    id: index
+                });
+                
+                // Add info window for each marker
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="padding: 10px; max-width: 200px;">
+                            <h3 style="margin-top: 0;">${attraction.name}</h3>
+                            <p>${attraction.description}</p>
+                            <p><strong>City:</strong> ${attraction.city}</p>
+                            <p><strong>Duration:</strong> ${attraction.duration}</p>
+                        </div>
+                    `
+                });
+                
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+                
+                markers.push(marker);
+            });
+        }
+
+        // Function to simulate Google Maps API
+        function simulateGoogleMaps() {
+            google = {
+                maps: {
+                    Map: function(element, options) {
+                        this.element = element;
+                        this.options = options;
+                        element.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background-color: #e8e8e8; font-size: 18px; color: #555;">
+                            <div style="text-align: center;">
+                                <img src="/api/placeholder/64/64" alt="Map Icon" style="display: block; margin: 0 auto 10px;">
+                                Map Visualization<br>
+                                <small>Showing ${attractionsData.length} locations in Japan</small>
+                            </div>
+                        </div>`;
+                        return this;
+                    },
+                    Marker: function(options) {
+                        this.options = options;
+                        this.addListener = function(event, callback) {
+                            // Simulate adding event listener
+                        };
+                        return this;
+                    },
+                    InfoWindow: function(options) {
+                        this.options = options;
+                        this.open = function(map, marker) {
+                            // Simulate opening info window
+                        };
+                        return this;
+                    },
+                    Animation: {
+                        DROP: 'drop'
+                    },
+                    event: {
+                        addDomListener: function(element, event, callback) {
+                            element.addEventListener(event, callback);
+                        }
+                    }
+                }
+            };
+            
+            initMap();
+        }
+
+        // Function to render attraction cards
+        function renderAttractionCards(attractions) {
+            const attractionList = document.getElementById('attraction-list');
+            attractionList.innerHTML = '';
+            
+            attractions.forEach((attraction, index) => {
+                const card = document.createElement('div');
+                card.className = 'attraction-card';
+                card.innerHTML = `
+                    <div class="attraction-image">
+                        <img src="/api/placeholder/400/160" alt="${attraction.name}">
+                        <div class="duration-badge">${attraction.duration}</div>
+                    </div>
+                    <div class="attraction-details">
+                        <h3>${attraction.name}</h3>
+                        <div class="attraction-location">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span style="margin-left: 5px;">${attraction.city}</span>
+                        </div>
+                        <p class="attraction-description">${attraction.description}</p>
+                        <a href="#" class="view-on-map" data-id="${index}">View on Map</a>
+                    </div>
+                `;
+                
+                attractionList.appendChild(card);
+                
+                // Add event listener to "View on Map" button
+                const viewOnMapBtn = card.querySelector('.view-on-map');
+                viewOnMapBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = parseInt(viewOnMapBtn.getAttribute('data-id'));
+                    
+                    // Center map on the marker
+                    map.setCenter({ 
+                        lat: attractions[id].latitude,
+                        lng: attractions[id].longitude
+                    });
+                    map.setZoom(14);
+                    
+                    // Trigger click on the marker
+                    google.maps.event.trigger(markers[id], 'click');
+                    
+                    // Scroll to map
+                    document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+
+        // Filter functions
+        function filterAttractions() {
+            const cityFilter = document.getElementById('city-filter').value;
+            const durationFilter = document.getElementById('duration-filter').value;
+            
+            let filteredAttractions = attractionsData;
+            
+            if (cityFilter !== 'all') {
+                filteredAttractions = filteredAttractions.filter(attraction => 
+                    attraction.city === cityFilter
+                );
+            }
+            
+            if (durationFilter !== 'all') {
+                filteredAttractions = filteredAttractions.filter(attraction => 
+                    attraction.duration === durationFilter
+                );
+            }
+            
+            renderAttractionCards(filteredAttractions);
+            
+            // Update markers visibility
+            markers.forEach((marker, index) => {
+                const isVisible = filteredAttractions.some(attraction => 
+                    attraction.name === attractionsData[index].name
+                );
+                
+                marker.setVisible(isVisible);
+            });
+        }
+
+        // Reset filters
+        document.getElementById('reset-filters').addEventListener('click', () => {
+            document.getElementById('city-filter').value = 'all';
+            document.getElementById('duration-filter').value = 'all';
+            filterAttractions();
+        });
+
+        // Add event listeners to filter controls
+        document.getElementById('city-filter').addEventListener('change', filterAttractions);
+        document.getElementById('duration-filter').addEventListener('change', filterAttractions);
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate Google Maps API
+            simulateGoogleMaps();
+            
+            // Render all attractions initially
+            renderAttractionCards(attractionsData);
+        });
+    </script>
+</body>
+</html>
