@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japan 2025 Trip: Seiya and Kerenza</title>
+    <!-- Google Maps API script with placeholder for your API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2gtAzo7DMQ-NoPJWb4ApWzcr_yTsPLLA&callback=initMap" async defer></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -486,91 +488,48 @@
         let map;
         let markers = [];
 
+        // Map initialization function (will be called by Google Maps API)
         function initMap() {
-            // Create a map centered on Japan
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 35.2, lng: 139.1 },
-                zoom: 9
-            });
-            
-            // Add markers for each attraction
-            attractionsData.forEach((attraction, index) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: attraction.latitude, lng: attraction.longitude },
-                    map: map,
-                    title: attraction.name,
-                    animation: google.maps.Animation.DROP,
-                    id: index
+            try {
+                // Create a map centered on Japan
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: 35.2, lng: 139.1 },
+                    zoom: 9
                 });
                 
-                // Add info window for each marker
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="padding: 10px; max-width: 200px;">
-                            <h3 style="margin-top: 0;">${attraction.name}</h3>
-                            <p>${attraction.description}</p>
-                            <p><strong>City:</strong> ${attraction.city}</p>
-                            <p><strong>Duration:</strong> ${attraction.duration}</p>
-                        </div>
-                    `
-                });
-                
-                marker.addListener('click', () => {
-                    infoWindow.open(map, marker);
-                });
-                
-                markers.push(marker);
-            });
-        }
-
-        // Function to simulate Google Maps API
-        function simulateGoogleMaps() {
-            google = {
-                maps: {
-                    Map: function(element, options) {
-                        this.element = element;
-                        this.options = options;
-                        element.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background-color: #e8e8e8; font-size: 18px; color: #555;">
-                            <div style="text-align: center;">
-                                <img src="/api/placeholder/64/64" alt="Map Icon" style="display: block; margin: 0 auto 10px;">
-                                Map Visualization<br>
-                                <small>Showing ${attractionsData.length} locations in Japan</small>
+                // Add markers for each attraction
+                attractionsData.forEach((attraction, index) => {
+                    const marker = new google.maps.Marker({
+                        position: { lat: attraction.latitude, lng: attraction.longitude },
+                        map: map,
+                        title: attraction.name,
+                        animation: google.maps.Animation.DROP,
+                        id: index
+                    });
+                    
+                    // Add info window for each marker
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px; max-width: 200px;">
+                                <h3 style="margin-top: 0;">${attraction.name}</h3>
+                                <p>${attraction.description}</p>
+                                <p><strong>City:</strong> ${attraction.city}</p>
+                                <p><strong>Duration:</strong> ${attraction.duration}</p>
                             </div>
-                        </div>`;
-                        return this;
-                    },
-                    Marker: function(options) {
-                        this.options = options;
-                        this.addListener = function(event, callback) {
-                            // Simulate adding event listener
-                        };
-                        this.setVisible = function(isVisible) {
-                            // Simulate showing/hiding marker
-                        };
-                        return this;
-                    },
-                    InfoWindow: function(options) {
-                        this.options = options;
-                        this.open = function(map, marker) {
-                            // Simulate opening info window
-                        };
-                        return this;
-                    },
-                    Animation: {
-                        DROP: 'drop'
-                    },
-                    event: {
-                        addDomListener: function(element, event, callback) {
-                            element.addEventListener(event, callback);
-                        },
-                        trigger: function(object, eventName) {
-                            // Simulate triggering an event
-                        }
-                    }
-                }
-            };
-            
-            initMap();
+                        `
+                    });
+                    
+                    marker.addListener('click', () => {
+                        infoWindow.open(map, marker);
+                    });
+                    
+                    markers.push(marker);
+                });
+            } catch (error) {
+                console.error("Error initializing map:", error);
+                document.getElementById('map').innerHTML = 
+                    '<div style="padding: 20px; text-align: center;">Error loading map. Please check your API key and connection.</div>';
+            }
         }
 
         // Function to render attraction cards
@@ -668,11 +627,10 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
-            // Simulate Google Maps API
-            simulateGoogleMaps();
-            
             // Render all attractions initially
             renderAttractionCards(attractionsData);
+            
+            // Map will be initialized by the Google Maps API callback
         });
     </script>
 </body>
