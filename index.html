@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japan 2025 Trip: Seiya and Kerenza</title>
-    <!-- Google Maps API script with placeholder for your API key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2gtAzo7DMQ-NoPJWb4ApWzcr_yTsPLLA&callback=initMap" async defer></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -40,7 +42,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            background-color: rgba(255, 107, 107, 0.3);
             opacity: 0.2;
             z-index: 1;
         }
@@ -484,51 +486,51 @@
             }
         ];
 
-        // Initialize the map
+        // Initialize the map and markers variables
         let map;
         let markers = [];
+        let markerLayer;
 
-        // Map initialization function (will be called by Google Maps API)
+        // Initialize the map using Leaflet
         function initMap() {
             try {
                 // Create a map centered on Japan
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: { lat: 35.2, lng: 139.1 },
-                    zoom: 9
-                });
+                map = L.map('map').setView([35.2, 139.1], 9);
+                
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
                 
                 // Add markers for each attraction
+                markerLayer = L.layerGroup().addTo(map);
+                
                 attractionsData.forEach((attraction, index) => {
-                    const marker = new google.maps.Marker({
-                        position: { lat: attraction.latitude, lng: attraction.longitude },
-                        map: map,
+                    const marker = L.marker([attraction.latitude, attraction.longitude], {
                         title: attraction.name,
-                        animation: google.maps.Animation.DROP,
-                        id: index
                     });
                     
-                    // Add info window for each marker
-                    const infoWindow = new google.maps.InfoWindow({
-                        content: `
-                            <div style="padding: 10px; max-width: 200px;">
-                                <h3 style="margin-top: 0;">${attraction.name}</h3>
-                                <p>${attraction.description}</p>
-                                <p><strong>City:</strong> ${attraction.city}</p>
-                                <p><strong>Duration:</strong> ${attraction.duration}</p>
-                            </div>
-                        `
-                    });
+                    // Add popup for each marker
+                    const popupContent = `
+                        <div style="padding: 10px; max-width: 200px;">
+                            <h3 style="margin-top: 0;">${attraction.name}</h3>
+                            <p>${attraction.description}</p>
+                            <p><strong>City:</strong> ${attraction.city}</p>
+                            <p><strong>Duration:</strong> ${attraction.duration}</p>
+                        </div>
+                    `;
                     
-                    marker.addListener('click', () => {
-                        infoWindow.open(map, marker);
-                    });
+                    marker.bindPopup(popupContent);
+                    marker.attractionId = index;
                     
+                    marker.addTo(markerLayer);
                     markers.push(marker);
                 });
             } catch (error) {
                 console.error("Error initializing map:", error);
                 document.getElementById('map').innerHTML = 
-                    '<div style="padding: 20px; text-align: center;">Error loading map. Please check your API key and connection.</div>';
+                    '<div style="padding: 20px; text-align: center;">Error loading map. Please check your connection.</div>';
             }
         }
 
@@ -568,14 +570,10 @@
                     const id = parseInt(viewOnMapBtn.getAttribute('data-id'));
                     
                     // Center map on the marker
-                    map.setCenter({ 
-                        lat: attractions[id].latitude,
-                        lng: attractions[id].longitude
-                    });
-                    map.setZoom(14);
+                    map.setView([attractions[id].latitude, attractions[id].longitude], 14);
                     
-                    // Trigger click on the marker
-                    google.maps.event.trigger(markers[id], 'click');
+                    // Open the popup
+                    markers[id].openPopup();
                     
                     // Scroll to map
                     document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
@@ -605,12 +603,29 @@
             renderAttractionCards(filteredAttractions);
             
             // Update markers visibility
-            markers.forEach((marker, index) => {
-                const isVisible = filteredAttractions.some(attraction => 
-                    attraction.name === attractionsData[index].name
-                );
+            markerLayer.clearLayers();
+            
+            markers = [];
+            filteredAttractions.forEach((attraction, index) => {
+                const marker = L.marker([attraction.latitude, attraction.longitude], {
+                    title: attraction.name,
+                });
                 
-                marker.setVisible(isVisible);
+                // Add popup for each marker
+                const popupContent = `
+                    <div style="padding: 10px; max-width: 200px;">
+                        <h3 style="margin-top: 0;">${attraction.name}</h3>
+                        <p>${attraction.description}</p>
+                        <p><strong>City:</strong> ${attraction.city}</p>
+                        <p><strong>Duration:</strong> ${attraction.duration}</p>
+                    </div>
+                `;
+                
+                marker.bindPopup(popupContent);
+                marker.attractionId = index;
+                
+                marker.addTo(markerLayer);
+                markers.push(marker);
             });
         }
 
@@ -627,10 +642,11 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the map
+            initMap();
+            
             // Render all attractions initially
             renderAttractionCards(attractionsData);
-            
-            // Map will be initialized by the Google Maps API callback
         });
     </script>
 </body>
