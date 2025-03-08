@@ -38,7 +38,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('/api/placeholder/800/200') center/cover;
+            background: url('https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
             opacity: 0.2;
             z-index: 1;
         }
@@ -217,7 +217,7 @@
     </div>
 
     <script>
-        // Data from the provided dataset
+        // Data from the provided dataset with added image URLs
         const attractionsData = [
             {
                 name: "Red Brick Warehouse",
@@ -225,7 +225,8 @@
                 duration: "3 days",
                 description: "Visit the small Japan Coast Guard museum featuring a North Korean spy ship recovered from the ocean floor after a running gun battle.",
                 latitude: 35.45,
-                longitude: 139.65
+                longitude: 139.65,
+                imageUrl: "https://a0.cdn.japantravel.com/photo/poi-47-214002/1236x824!/kanagawa-yokohama-red-brick-warehouse-214002.jpg"
             },
             {
                 name: "Daibutsu Trail",
@@ -233,7 +234,8 @@
                 duration: "3 days",
                 description: "Moderately challenging trail, can be slippery. Best visited on a dry day. Take the train to Kita Kamakura.",
                 latitude: 35.3197,
-                longitude: 139.55
+                longitude: 139.55,
+                imageUrl: "https://cdn.getyourguide.com/img/tour/e6834bb8d8c275a585c62c37d89e5cca16031d91dd3ff868f40577a01e7f7719.jpg/68.webp"
             },
             {
                 name: "Minato Mirai",
@@ -241,7 +243,8 @@
                 duration: "3 days",
                 description: "Shopping district with modern attractions.",
                 latitude: 35.4545,
-                longitude: 139.6317
+                longitude: 139.6317,
+                imageUrl: "https://cdn.cheapoguides.com/wp-content/uploads/sites/2/2020/05/minato-mirai-yokohama-iStock-187635166-1024x600.jpg"
             },
             {
                 name: "Sankeien Garden",
@@ -249,7 +252,8 @@
                 duration: "3 days",
                 description: "Beautiful traditional Japanese garden.",
                 latitude: 35.4333,
-                longitude: 139.65
+                longitude: 139.65,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuIJx-1c2FxcfN_Vzu3N0ZjqN7SiKsqluOaQ&s"
             },
             {
                 name: "Chinatown",
@@ -257,7 +261,8 @@
                 duration: "3 days",
                 description: "Explore the vibrant Chinatown area.",
                 latitude: 35.4427,
-                longitude: 139.65
+                longitude: 139.65,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNwtF_ejcHhxAtCc3h9pXdzTatv-Jap71YIA&s"
             },
             {
                 name: "Yamate",
@@ -265,7 +270,8 @@
                 duration: "3 days",
                 description: "Historic area with Western-style houses.",
                 latitude: 35.4333,
-                longitude: 139.65
+                longitude: 139.65,
+                imageUrl: "https://onb-cdn.b-cdn.net/images-stn-yokohama/67-Yamate-Historic-District-Yokohama1.jpg"
             },
             {
                 name: "New Grand Hotel",
@@ -273,7 +279,8 @@
                 duration: "3 days",
                 description: "Enjoy a meal or coffee at this historic hotel.",
                 latitude: 35.4439,
-                longitude: 139.64
+                longitude: 139.64,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLrUNBuDjnaINGqOtjTmCcqZsnnpmtfaQCeQ&s"
             },
             {
                 name: "Shin-Yokohama Ramen Street",
@@ -281,7 +288,8 @@
                 duration: "3 days",
                 description: "Famous ramen street located at the station.",
                 latitude: 35.51,
-                longitude: 139.617
+                longitude: 139.617,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcEzxgQvkbIvgUz5JMONoJRV9TbkeofBNrqQ&s"
             },
             {
                 name: "Mikasa Park & Battleship Mikasa",
@@ -289,7 +297,8 @@
                 duration: "1 day",
                 description: "Preserved Japanese battleship that played a major role in the Russo-Japanese War.",
                 latitude: 35.2833,
-                longitude: 139.6667
+                longitude: 139.6667,
+                imageUrl: "https://d2izacsg13mtms.cloudfront.net/RN7MQU/images/867c4c1d71a6b01e459a880697a8b87648017e895e7bc117153821e0618a13ff.jpg"
             },
             {
                 name: "Dobuita Street",
@@ -297,7 +306,8 @@
                 duration: "1 day",
                 description: "Try the Yokosuka Navy Burger or Kaigun (Navy) Curry, inspired by U.S. and Japanese naval meals.",
                 latitude: 35.2833,
-                longitude: 139.6667
+                longitude: 139.6667,
+                imageUrl: "https://routemuseum.jp/wp-content/uploads/2021/04/B20_03-scaled.jpg"
             },
             {
                 name: "Kannonzaki Park & Lighthouse",
@@ -305,7 +315,8 @@
                 duration: "1 day",
                 description: "Scenic coastal walk with a lighthouse.",
                 latitude: 35.2833,
-                longitude: 139.6667
+                longitude: 139.6667,
+                imageUrl: "https://routemuseum.jp/wp-content/uploads/2021/04/C02_01-scaled.jpg"
             },
             {
                 name: "Verny Park",
@@ -313,7 +324,8 @@
                 duration: "1 day",
                 description: "French-style park with beautiful views.",
                 latitude: 35.2833,
-                longitude: 139.6667
+                longitude: 139.6667,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxTu_BTqT2dqoJ7by7ATg3uPszVyXaXQNfSw&s"
             },
             {
                 name: "Open Air Museum",
@@ -321,7 +333,8 @@
                 duration: "2 days",
                 description: "Outdoor museum with sculptures and art installations.",
                 latitude: 35.25,
-                longitude: 139.1
+                longitude: 139.1,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtGoD3vHI-LqczH7TRXTHo-TZAdQBAP-WAMQ&s"
             },
             {
                 name: "Hakone Shrine",
@@ -329,7 +342,8 @@
                 duration: "2 days",
                 description: "Famous shrine located by Lake Ashi.",
                 latitude: 35.2,
-                longitude: 139.0333
+                longitude: 139.0333,
+                imageUrl: "https://cdn.zekkei-japan.jp/images/spots/b7b07de27cac4eababf4b17b836f8cbb.jpg"
             },
             {
                 name: "Hakone Ropeway",
@@ -337,7 +351,8 @@
                 duration: "2 days",
                 description: "Scenic ropeway offering views of the surrounding area.",
                 latitude: 35.2333,
-                longitude: 139.1
+                longitude: 139.1,
+                imageUrl: "https://cdn.getyourguide.com/img/location/5e3cd6c1ae58d-wide.jpeg/99.jpg"
             },
             {
                 name: "Volcanic Eggs",
@@ -345,7 +360,8 @@
                 duration: "2 days",
                 description: "Tour to see volcanic eggs (Japanese only, booking required).",
                 latitude: 35.2333,
-                longitude: 139.1
+                longitude: 139.1,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmxyp_tAG83HV2_6MuG23atjJ-btc82Lmg_A&s"
             },
             {
                 name: "Lake Ashi",
@@ -353,7 +369,8 @@
                 duration: "2 days",
                 description: "Beautiful lake with views of Mount Fuji on clear days.",
                 latitude: 35.2,
-                longitude: 139.0333
+                longitude: 139.0333,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJIb3m_35A37ADD3K2UEi1ObLo-d_yFFUEUQ&s"
             },
             {
                 name: "Gyoza Centre",
@@ -361,7 +378,8 @@
                 duration: "2 days",
                 description: "Restaurant known for its gyoza (dumplings).",
                 latitude: 35.2333,
-                longitude: 139.1
+                longitude: 139.1,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsrDns_B91eEb1CUhno5m220U-OQpDMDyH7g&s"
             },
             {
                 name: "Owakudani Valley",
@@ -369,7 +387,8 @@
                 duration: "2 days",
                 description: "Volcanic valley with hot springs and sulfur vents.",
                 latitude: 35.2333,
-                longitude: 139.1
+                longitude: 139.1,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRilPK_E4RAEw6m8asraz1eWtEXkCQr1tCt3A&s"
             },
             {
                 name: "Amazake Chaya",
@@ -377,7 +396,8 @@
                 duration: "2 days",
                 description: "Traditional tea house offering amazake (sweet sake).",
                 latitude: 35.2333,
-                longitude: 139.1
+                longitude: 139.1,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRedM4woO9jbbvcXTEojreDiu6Lzc5DjsgmkQ&s"
             },
             {
                 name: "Deep Sea Aquarium",
@@ -385,7 +405,8 @@
                 duration: "1-2 days",
                 description: "Aquarium featuring deep-sea creatures.",
                 latitude: 35.1,
-                longitude: 138.8667
+                longitude: 138.8667,
+                imageUrl: "https://svcstrg.cld.navitime.jp/travelguide/p22030016/p22030016_08t.jpg"
             },
             {
                 name: "Mishima Skywalk",
@@ -393,7 +414,8 @@
                 duration: "1-2 days",
                 description: "Suspension bridge offering panoramic views.",
                 latitude: 35.1167,
-                longitude: 138.9167
+                longitude: 138.9167,
+                imageUrl: "https://donnykimball.com/wp-content/uploads/2023/11/Mishima-Skywalk.webp"
             },
             {
                 name: "Senbonhama Beach",
@@ -401,7 +423,8 @@
                 duration: "1-2 days",
                 description: "Scenic beach area.",
                 latitude: 35.1,
-                longitude: 138.8667
+                longitude: 138.8667,
+                imageUrl: "https://www.shutterstock.com/image-photo/senbonhama-beach-600nw-704785765.jpg"
             },
             {
                 name: "Numazu Fish Market",
@@ -409,7 +432,8 @@
                 duration: "1-2 days",
                 description: "Fish market offering fresh seafood (closed on Saturdays).",
                 latitude: 35.1,
-                longitude: 138.8667
+                longitude: 138.8667,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrRQP9XHwnavZKiWvnq6Vi9RsZzjq-V1Chkg&s"
             },
             {
                 name: "Mt Kanuki",
@@ -417,7 +441,8 @@
                 duration: "1-2 days",
                 description: "Mountain with hiking trails.",
                 latitude: 35.1,
-                longitude: 138.8667
+                longitude: 138.8667,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrkSRZdQZm3A7ejCkuIuzIo1Rbw2nIqevfA&s"
             },
             {
                 name: "Kakitagawa Springs",
@@ -425,7 +450,8 @@
                 duration: "1-2 days",
                 description: "Natural springs with clear water.",
                 latitude: 35.1,
-                longitude: 138.8667
+                longitude: 138.8667,
+                imageUrl: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/1b/bd/be/caption.jpg?w=1200&h=-1&s=1"
             },
             {
                 name: "Shirahama Beach",
@@ -433,7 +459,8 @@
                 duration: "1.5 days",
                 description: "Beautiful beach area.",
                 latitude: 34.6833,
-                longitude: 138.9333
+                longitude: 138.9333,
+                imageUrl: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/a4/f6/d3/caption.jpg?w=1200&h=-1&s=1"
             },
             {
                 name: "Perry Road",
@@ -441,7 +468,8 @@
                 duration: "1.5 days",
                 description: "Historic road with shops and restaurants.",
                 latitude: 34.6833,
-                longitude: 138.9333
+                longitude: 138.9333,
+                imageUrl: "https://cdn.zekkei-japan.jp/images/spots/81a3830cc82a1ffacd78adc4d1da68e7.jpg"
             },
             {
                 name: "Cape Irozaki",
@@ -449,7 +477,8 @@
                 duration: "1.5 days",
                 description: "Scenic cape with a beach.",
                 latitude: 34.6833,
-                longitude: 138.9333
+                longitude: 138.9333,
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXRU3oTg686SFoXyI6Bc5SK4Ui4F7wbDbqFw&s"
             }
         ];
 
@@ -460,7 +489,7 @@
         function initMap() {
             // Create a map centered on Japan
             map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 35.2, longitude: 139.1 },
+                center: { lat: 35.2, lng: 139.1 },
                 zoom: 9
             });
             
@@ -515,6 +544,9 @@
                         this.addListener = function(event, callback) {
                             // Simulate adding event listener
                         };
+                        this.setVisible = function(isVisible) {
+                            // Simulate showing/hiding marker
+                        };
                         return this;
                     },
                     InfoWindow: function(options) {
@@ -530,6 +562,9 @@
                     event: {
                         addDomListener: function(element, event, callback) {
                             element.addEventListener(event, callback);
+                        },
+                        trigger: function(object, eventName) {
+                            // Simulate triggering an event
                         }
                     }
                 }
@@ -548,7 +583,7 @@
                 card.className = 'attraction-card';
                 card.innerHTML = `
                     <div class="attraction-image">
-                        <img src="/api/placeholder/400/160" alt="${attraction.name}">
+                        <img src="${attraction.imageUrl || '/api/placeholder/400/160'}" alt="${attraction.name}">
                         <div class="duration-badge">${attraction.duration}</div>
                     </div>
                     <div class="attraction-details">
